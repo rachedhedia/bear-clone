@@ -1,0 +1,263 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+@import 'reset';
+
+$primary-text-color: #000;
+$secondary-text-color: #A9ABAC;
+$border-color:rgb(214, 212, 212);
+
+@mixin icon($image-url, $width, $height) {
+    display: block;
+    background: url($image-url);    
+    background-size: 100% 100%;            
+    width: $width;
+    height: $height;    
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+
+body {
+font-family: 'Montserrat', sans-serif;
+display: grid;
+grid-template-columns: calc(0.17*1200px) calc(0.25*1200px) calc(0.53*100%);
+font-size: 0.9rem;
+height: 100vh;
+}
+
+// Navigation panel
+nav {
+    background-color: #2E3235;
+    color: #B4B3B2;        
+}
+
+.settings-panel {
+    height: 3em;        
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.icon-connected {
+    @include icon('../assets/connected-icon.svg', 1.2em, 1.2em);
+    margin: 0 0.7em 0 0;            
+}
+
+.icon-settings {
+    @include icon('../assets/settings-icon.svg', 1em, 1em);
+    margin: 0 1.1em 0 0;            
+}
+
+.categories {
+
+}
+
+.folders {
+    
+    .folders-header
+    { padding: 0.4em 0;      
+      display: grid;
+      grid-template-columns: 2em 2em auto;
+      grid-template-areas: "open-close-icon folder-icon caption";
+      align-items: center;
+      
+
+        .icon-folder-unexpanded {             
+            @include icon('../assets/folder-unexpanded-icon.svg', 0.8em, 0.8em);
+            grid-area: open-close-icon;
+            margin: 0 auto;           
+        }
+
+        .icon-folder-notes {
+            @include icon('../assets/note-icon.svg', 1.2em, 1.2em);
+            grid-area: folder-icon;
+            margin: 0 auto;                            
+        }            
+        
+        .folders-header-caption {
+            display: block;
+            text-transform: capitalize;  
+            grid-area: caption;          
+            margin: 0 0 0 0.3em;                 
+        }
+    }
+
+    ul {        
+        display: grid;
+        grid-template-columns: 100%;                
+    }   
+
+    li {
+        padding: 0.5em 0;
+        display: grid;
+        grid-template-columns: 3.2em 2em auto;
+        grid-template-areas: ". icon label";
+        align-items: center;                 
+        
+        .folder-label {
+            display: block;
+            grid-area: label;
+            text-transform: capitalize;
+        }
+    }
+
+    a {
+        display: block;     
+    }    
+}
+
+.trash {    
+    padding: 0.5em 0;      
+    display: grid;
+    grid-template-columns: 2em 2em auto;
+    grid-template-areas: ". icon caption";
+    align-items: center;    
+}
+
+.icon-trash {
+    @include icon('../assets/note-icon.svg', 1.2em, 1.2em);
+    grid-area: icon;
+    margin: 0 auto;    
+}
+
+.trash-caption {
+    display: block;
+    grid-area: caption;
+    text-transform: capitalize;
+    margin: 0 0 0 0.3em;
+}
+
+.tags {
+    display: grid;
+    grid-template-columns: 100%;
+    font-size: 0.9em;
+    margin-top: 0.8em;
+
+    .tag-level1 {        
+        padding: 0.9em;
+        display: grid;
+        grid-template-columns: 1.7em 2em auto;
+        grid-template-areas: "expand-icon tag-icon caption";
+        align-items: center;           
+    }
+
+    .icon-expand {
+        display: block;
+        margin: 0 auto;
+        grid-area: expand-icon; 
+    }
+
+    .tag-level2 {
+        padding: 0.4em;
+        display: grid;
+        grid-template-columns: 3.2em 2em auto;
+        grid-template-areas: ". tag-icon caption";
+        align-items: center;
+    }
+
+    .tag {
+        display: block;
+        margin: 0 0 0 0.3em;
+        grid-area: caption;        
+    }
+
+    .tag-icon {     
+        @include icon('../assets/note-icon.svg', 1em, 1em);           
+        margin: 0 auto;
+        grid-area: tag-icon;
+    }
+}
+
+
+// Documents panel
+
+.search-panel {
+    height: 3em;
+    background-color: #FBFBFB;
+    border-bottom: solid 1px #F1F1F1;
+    display: grid;
+    grid-template-columns: auto 10%;
+    grid-template-rows: 100%;
+    align-items: center;
+    
+    input {
+        margin: 0 1.4em;
+        border: 1px solid #707070;
+        border-radius: 0.4em;
+        height: 1.7em;
+        text-align: center;
+        color: $secondary-text-color;
+        font-size: 0.9em;    
+    }    
+}
+
+.documents-panel {
+    border-right: solid 1px $border-color;
+}
+
+.document-preview {
+    height: auto;
+    font-size: 0.9em;
+    background-color: #FBFBFB;
+    //border-bottom: solid 1px #F1F1F1;
+    display: grid;
+    grid-template-columns: 9% auto;
+    grid-template-rows: auto;
+    grid-template-areas: "date header"
+                         "date preview";  
+    padding: 1em 1em 1em 0;  
+    border-left: solid 6px #FBFBFB;
+    position: relative;
+    &::after
+    {
+        content: "";
+        position: absolute;
+        background-color: $border-color;
+        bottom: 0;
+        right:0;
+        width: 80%;
+        height: 1px;
+    }
+}
+
+.document-date {
+    grid-area: date;
+    text-align: center;    
+    color: $secondary-text-color;  
+    padding-left: 0.8em;      
+}
+
+.document-preview-title {
+    grid-area: header;
+    font-size: 1.1em;
+    text-align: left;
+    font-weight: bold;        
+    padding-left: 1em;
+}
+
+.document-preview-content {
+    grid-area: preview;
+    text-align: left;    
+    color: $secondary-text-color;
+    padding-top: 1em;
+    padding-left: 1em;
+}
+
+.document-preview__active {
+    background-color: #FFFFFF;
+    border-left-color:  rgb(241, 75, 77);
+}
+
+
+
+
+// Document content
+.document-content 
+{
+    padding: 2em 5em 0 5em;
+    font-size: 0.9em;
+    text-align: left;
+    line-height: 1.6em;
+}
