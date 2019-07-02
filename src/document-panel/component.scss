@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+
+$primary-text-color: #000;
+$secondary-text-color: #A9ABAC;
+$border-color:rgb(214, 212, 212);
+
+@mixin icon($image-url, $width, $height) {
+    display: block;
+    background: url($image-url);    
+    background-size: 100% 100%;            
+    width: $width;
+    height: $height;    
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+.document-content 
+{
+    padding: 2em 5em 0 5em;
+    font-size: 0.9em;
+    text-align: left;
+    line-height: 1.6em;
+    
+}

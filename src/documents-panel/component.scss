@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+
+$primary-text-color: #000;
+$secondary-text-color: #A9ABAC;
+$border-color:rgb(214, 212, 212);
+
+@mixin icon($image-url, $width, $height) {
+    display: block;
+    background: url($image-url);    
+    background-size: 100% 100%;            
+    width: $width;
+    height: $height;    
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+.search-panel {
+    height: 3em;
+    background-color: #FBFBFB;
+    border-bottom: solid 1px #F1F1F1;
+    display: grid;
+    grid-template-columns: auto 10%;
+    grid-template-rows: 100%;
+    align-items: center;
+    
+    input {
+        margin: 0 1.4em;
+        border: 1px solid #707070;
+        border-radius: 0.4em;
+        height: 1.7em;
+        text-align: center;
+        color: $secondary-text-color;
+        font-size: 0.9em;    
+    }    
+}
+
+.documents-panel {
+    border-right: solid 1px $border-color;
+}
+
+.document-preview {
+    height: auto;
+    font-size: 0.9em;
+    background-color: #FBFBFB;
+    //border-bottom: solid 1px #F1F1F1;
+    display: grid;
+    grid-template-columns: 9% auto;
+    grid-template-rows: auto;
+    grid-template-areas: "date header"
+                         "date preview";  
+    padding: 1em 1em 1em 0;  
+    border-left: solid 6px #FBFBFB;
+    position: relative;
+    cursor: default;
+    &::after
+    {
+        content: "";
+        position: absolute;
+        background-color: $border-color;
+        bottom: 0;
+        right:0;
+        width: 80%;
+        height: 1px;
+        cursor: default;
+    }
+}
+
+.document-date {
+    grid-area: date;
+    text-align: center;    
+    color: $secondary-text-color;  
+    padding-left: 0.8em;          
+}
+
+.document-preview-title {
+    grid-area: header;
+    font-size: 1.1em;
+    text-align: left;
+    font-weight: bold;        
+    padding-left: 1em;
+}
+
+.document-preview-content {
+    grid-area: preview;
+    text-align: left;    
+    color: $secondary-text-color;
+    padding-top: 1em;
+    padding-left: 1em;
+}
+
+.document-preview__active {
+    background-color: #FFFFFF;
+    border-left-color:  rgb(241, 75, 77);
+}
