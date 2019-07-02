@@ -1,0 +1,13 @@
+.CodeMirror {
+    border: 0px hidden;
+    padding: 2em;
+}
+
+.editor-toolbar {
+    border: 0px hidden;
+    border-bottom: 1px solid #ddd;
+}
+
+.editor-toolbar::after{
+    margin-top: 3px;
+}

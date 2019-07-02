@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import './component.scss'
 
 function DocumentsPanel(props) {               
-
-    const [activeDocumentIndex, setActiveDocumentIndex] = useState(0);
 
     return (
 <section className="documents-panel">
@@ -14,7 +12,7 @@ function DocumentsPanel(props) {
     </section>
     <ul>        
     {props.documents.map((document, index) =>
-        <li className={index === activeDocumentIndex ? "document-preview document-preview__active" : "document-preview"} onClick={() => setActiveDocumentIndex(index)}>
+        <li key={document.title} className={index === props.activeDocumentIndex ? "document-preview document-preview__active" : "document-preview"} onClick={() => props.setActiveDocumentIndex(index)}>
             <div className="document-date">{document.date}</div>
             <h2 className="document-preview-title">{document.title}</h2>
             <p className="document-preview-content">{document.content.substring(0, 70) + '...'}</p>

@@ -1,25 +1,21 @@
 import React, {useState} from 'react';
 import './component.scss';
 
-function renderSubFolders()
-{
-    return (<ul>                                
-        <li>
+function renderSubFolders(props)
+{   
+    const subfolders = props.folders.map((folder) => 
+        <li key={folder}>
             <span className="icon-folder-untagged"></span>
-            <span className="folder-label">untagged</span>
+            <span className="folder-label">{folder}</span>
         </li>
-        <li>
-                <span className="icon-folder-todo"></span>
-                <span className="folder-label">todo</span>                                
-        </li>
-        <li>
-                <span className="icon-folder-today"></span>
-                <span className="folder-label">today</span>                                                                
-        </li>
+    );    
+    
+    return (<ul>            
+        {subfolders}
     </ul>     );
 }
 
-function renderSubTags() {
+function renderSubTags(props) {
     return (
         <ul>
                             <li className="tag-level2"><span className="tag-icon"></span><span className="tag">organize</span></li>
@@ -33,6 +29,7 @@ function NavigationPanel(props) {
 
     const [foldersExpanded, setFoldersExpanded] = useState(false);
     const [tagsExpanded, setTagsExpanded] = useState(false);
+    
     return (
         <nav>
     <div className="settings-panel">
@@ -46,7 +43,7 @@ function NavigationPanel(props) {
                     <span className="icon-folder-notes" ></span>
                     <span className="folders-header-caption">Notes</span>                
             </div>    
-            {foldersExpanded === true && renderSubFolders()}                                                             
+            {foldersExpanded === true && renderSubFolders(props)}                                                             
         </div>
         <div className="trash">
                 <span className="icon-trash"></span>
