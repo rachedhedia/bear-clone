@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './app.js'
+import Login from './login.js'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<Login />, document.getElementById('root'));
 
 if (module.hot) {
     module.hot.accept()

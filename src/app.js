@@ -5,21 +5,6 @@ import DocumentsPanel from './documents-panel/component.js'
 import DocumentPanel from './document-panel/component.js'
 import loadedData from './data.yml'
 
-import firebase from 'firebase'
-import firebaseConfig from './firebaseconfig.json'
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-
-firebase.initializeApp(firebaseConfig);
-
-const firebaseSigninConfig = {
-    signInOptions: [
-      firebase.auth.EmailAuthProvider.PROVIDER_ID      
-    ],
-    callbacks: {      
-      signInSuccessWithAuthResult: () => false
-    }
-  };
-
 function regenerateDatas(data, activeDocumentId, newContent) {
     return {
         ...data,
@@ -51,19 +36,20 @@ function buildSelectedFoldersIds(folders, activeFolderId)
     return selectedFoldersIds;
 }
 
-function App() {
+function App(props) {
 
-    const [userIsSignedIn, setUserSignedIn] = useState(!!firebase.auth().currentUser);
-    const [data, setData] = useState(loadedData);
+    
+    const [data, setData] = useState({documents: [], folders: loadedData.folders, loaded: false});
     const [activeFolderId, setActiveFolderId] = useState(1);
-    const [activeDocumentId, setActiveDocumentId] = useState(1);
-
-    useEffect(() => {
-        firebase.auth().onAuthStateChanged((user) => setUserSignedIn(!!user));
-    });
-
-    useEffect(() => {
-
+    const [activeDocumentId, setActiveDocumentId] = useState(1);    
+    
+    useEffect(() => {        
+         
+        if(!data.loaded)
+        {                     
+            setData({documents: loadedData.documents.filter(document => document.owner === props.userEmail), folders: loadedData.folders, loaded: true});                                    
+        }              
+        
         const selectedDocuments = data.documents.filter(document => selectedFoldersIds.includes(document.folderId));
         let activeDocument = selectedDocuments.find(document => document.id === activeDocumentId);
         if (activeDocument === undefined) {
@@ -96,17 +82,11 @@ function App() {
     }
 
     const selectedFoldersIds = buildSelectedFoldersIds(data.folders, activeFolderId);
-    const selectedDocuments = data.documents.filter(document => selectedFoldersIds.includes(document.folderId));
-    const activeDocument = selectedDocuments.find(document => document.id === activeDocumentId);
-    const activeDocumentContent = activeDocument != undefined ? activeDocument.content : "";
+        const selectedDocuments = data.documents.filter(document => selectedFoldersIds.includes(document.folderId));
+        const activeDocument = selectedDocuments.find(document => document.id === activeDocumentId);
+        const activeDocumentContent = activeDocument != undefined ? activeDocument.content : "";
 
     
-    if(!userIsSignedIn)
-    {
-        return <StyledFirebaseAuth uiConfig={firebaseSigninConfig} firebaseAuth={firebase.auth()}/>
-    }
-    else
-    {
         return (
             <div className="application-root">
                 <NavigationPanel activeFolderId={activeFolderId} folders={data.folders} setActiveFolderId={setActiveFolderId}></NavigationPanel>
@@ -114,8 +94,7 @@ function App() {
                 <DocumentPanel documentUniqueId={activeDocumentId} documentContent={activeDocumentContent} setActiveDocumentContent={(newContent) => setData(regenerateDatas(data, activeDocumentId, newContent))}></DocumentPanel>
     
             </div>
-        )
-    }    
+        )    
 }
 
 export default App
