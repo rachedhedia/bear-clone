@@ -40,14 +40,61 @@ function handleKeyboardInput(event, props, areFoldersExpanded, setFoldersExpande
     }
 }
 
-function renderSubFolders(props)
-{   
+function renderSubTags(props) {
+    return (
+        <ul>
+                            <li className="tag-level2"><span className="tag-icon"></span><span className="tag">organize</span></li>
+                            <li className="tag-level2"><span className="tag-icon"></span><span className="tag">pro</span></li>
+                            <li className="tag-level2"><span className="tag-icon"></span><span className="tag">tags multiword</span></li>
+                    </ul>
+    );
+}
+
+class NavigationPanel extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.focusedElementRef = React.createRef();
+        this.focusFocusedElement = this.focusFocusedElement.bind(this);
+        this.renderSubFolders = this.renderSubFolders.bind(this);
+        this.setFoldersExpanded = this.setFoldersExpanded.bind(this);
+        this.setTagsExpanded = this.setTagsExpanded.bind(this);
+        
+        this.state = {
+            foldersExpanded: false,
+            tagsExpanded: false
+          };
+    }
+
+    componentDidUpdate(prevProps)
+    {
+        if(prevProps.activeFolderId !== this.props.activeFolderId)
+        {
+            this.focusFocusedElement();
+        }        
+    }
+
+    setFoldersExpanded(foldersExpanded) {
+        this.setState({foldersExpanded: foldersExpanded});
+    }
+
+    setTagsExpanded(tagsExpanded) {
+        this.setState({tagsExpanded: tagsExpanded});
+    }
+
+    focusFocusedElement() {
+        console.log('focus acquired');
+        this.focusedElementRef.current.focus();
+    } 
+
+    renderSubFolders() {   
+    const props = this.props;
     const subfolders = props.folders.
     filter(folder => folder.label === 'notes').
     map(folder => folder.subfolders).pop().
     map(folder =>     
         <li key={folder.id}>
-        <a href="#"  className={folder.id === props.activeFolderId ? "nav-item-active" :""} onClick={() => props.setActiveFolderId(folder.id)} onKeyDown={(event) => handleUpDownKeyBoardInput(event, props, true)}> 
+        <a href="#"  className={folder.id === props.activeFolderId ? "nav-item-active" :""} ref={props.activeFolderId ===  folder.id ? this.focusedElementRef : ""} onClick={() => props.setActiveFolderId(folder.id)} onKeyDown={(event) => handleUpDownKeyBoardInput(event, props, true)}> 
             <span className="icon-folder-untagged"></span>
             <span className="folder-label">{folder.label}</span>
         </a>
@@ -59,54 +106,42 @@ function renderSubFolders(props)
     </ul>     );
 }
 
-function renderSubTags(props) {
-    return (
-        <ul>
-                            <li className="tag-level2"><span className="tag-icon"></span><span className="tag">organize</span></li>
-                            <li className="tag-level2"><span className="tag-icon"></span><span className="tag">pro</span></li>
-                            <li className="tag-level2"><span className="tag-icon"></span><span className="tag">tags multiword</span></li>
-                    </ul>
-    );
-}
-
-function NavigationPanel(props) {
-
-    const [foldersExpanded, setFoldersExpanded] = useState(false);
-    const [tagsExpanded, setTagsExpanded] = useState(false);
-    
-    return (
-        <nav>
-    <div className="settings-panel">
-        <span className="icon-connected"></span>
-        <a href="#" className="icon-settings" onClick={() => alert('settings')}></a>
-    </div>
-    <div className="categories">
-        <div className="folders">
-            <a href="#" className={props.activeFolderId === props.folders.filter(folder => folder.label === 'notes').pop().id ? "folders-header nav-item-active" : "folders-header"} onClick={() => props.setActiveFolderId(props.folders.filter(folder => folder.label === 'notes').pop().id)} onKeyDown={(event) => handleKeyboardInput(event, props, foldersExpanded, setFoldersExpanded)}>
-                    <span href="#" className="icon-folder-unexpanded" onClick={() => setFoldersExpanded(!foldersExpanded)}></span>
-                    <span className="icon-folder-notes" ></span>
-                    <span className="folders-header-caption">Notes</span>                
-            </a>    
-            {foldersExpanded === true && renderSubFolders(props)}                                                             
+    render() {
+        const props = this.props;
+        return (
+            <nav>
+        <div className="settings-panel">
+            <span className="icon-connected"></span>
+            <a href="#" className="icon-settings" onClick={() => alert('settings')}></a>
         </div>
-        <a href="#" className={props.activeFolderId === props.folders.filter(folder => folder.label === 'trash').pop().id ? "trash nav-item-active"  : "trash"} onClick={() => props.setActiveFolderId(props.folders.filter(folder => folder.label === 'trash').pop().id)} onKeyDown={(event) => handleUpDownKeyBoardInput(event, props, foldersExpanded)}>
-                <span className="icon-trash"></span>
-                <span className="trash-caption">trash</span>
-            </a>         
-        </div>           
-            <ul className="tags">
-                <li>
-                    <span className="tag-level1">
-                        <a href="#" className="icon-expand" onClick={() => setTagsExpanded(!tagsExpanded)}></a>                     
-                        <span className="tag-icon"></span>      
-                        <span className="tag">welcome</span>
-                    </span>                        
-                    {tagsExpanded === true && renderSubTags()}                                            
-                </li>            
-    </ul>
-
-</nav>
-    )
+        <div className="categories">
+            <div className="folders">                
+                <a href="#" className={props.activeFolderId === props.folders.filter(folder => folder.label === 'notes').pop().id ? "folders-header nav-item-active" : "folders-header"} ref={props.activeFolderId === props.folders.filter(folder => folder.label === 'notes').pop().id ? this.focusedElementRef : ""} onClick={() => props.setActiveFolderId(props.folders.filter(folder => folder.label === 'notes').pop().id)} onKeyDown={(event) => handleKeyboardInput(event, this.props, this.state.foldersExpanded, this.setFoldersExpanded)}>
+                        <span href="#" className="icon-folder-unexpanded" onClick={() => this.setState({foldersExpanded : !this.state.foldersExpanded})}></span>
+                        <span className="icon-folder-notes" ></span>
+                        <span className="folders-header-caption">Notes</span>                
+                </a>    
+                {this.state.foldersExpanded === true && this.renderSubFolders()}                                                             
+            </div>
+            <a href="#" className={props.activeFolderId === props.folders.filter(folder => folder.label === 'trash').pop().id ? "trash nav-item-active"  : "trash"} onClick={() => props.setActiveFolderId(props.folders.filter(folder => folder.label === 'trash').pop().id)} ref={props.activeFolderId === props.folders.filter(folder => folder.label === 'trash').pop().id ? this.focusedElementRef : ""} onKeyDown={(event) => handleUpDownKeyBoardInput(event, props, this.state.foldersExpanded)}>
+                    <span className="icon-trash"></span>
+                    <span className="trash-caption">trash</span>
+                </a>         
+            </div>           
+                <ul className="tags">
+                    <li>
+                        <span className="tag-level1">
+                            <a href="#" className="icon-expand" onClick={() => this.setState({tagsExpanded : !this.state.tagsExpanded})}></a>                     
+                            <span className="tag-icon"></span>      
+                            <span className="tag">welcome</span>
+                        </span>                        
+                        {this.state.tagsExpanded === true && renderSubTags()}                                            
+                    </li>            
+        </ul>
+    
+    </nav>
+        )
+    }   
 }
 
 export default NavigationPanel;
