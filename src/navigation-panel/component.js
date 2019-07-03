@@ -3,6 +3,7 @@ import './component.scss';
 
 function handleUpDownKeyBoardInput(event, props, areFoldersExpanded)
 {
+    event.preventDefault();
     const foldersList = props.folders.flatMap((folder) => {
         let foldersList = [folder];
         if(folder.hasOwnProperty('subfolders') && areFoldersExpanded)
@@ -29,6 +30,7 @@ function handleUpDownKeyBoardInput(event, props, areFoldersExpanded)
 
 function handleKeyboardInput(event, props, areFoldersExpanded, setFoldersExpanded)
 {
+    event.preventDefault();
     handleUpDownKeyBoardInput(event, props, areFoldersExpanded);
     if(event.key == 'ArrowRight')
     {
@@ -64,6 +66,11 @@ class NavigationPanel extends React.Component {
             foldersExpanded: false,
             tagsExpanded: false
           };
+    }
+
+    componentDidMount()
+    {
+        this.focusFocusedElement();
     }
 
     componentDidUpdate(prevProps)

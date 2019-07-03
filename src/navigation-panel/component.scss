@@ -17,7 +17,6 @@ a {
     color: white;
 }
 
-
 .application-root {
 font-family: 'Montserrat', sans-serif;
 display: grid;
@@ -50,7 +49,10 @@ nav {
 }
 
 .categories {
-
+    a:focus {
+        outline-style:none;
+        
+    }
 }
 
 .nav-item-active {
@@ -111,12 +113,12 @@ nav {
             text-transform: capitalize;
             cursor: default;
         }
-        }
-    }
+        }        
+    }   
 
     a {
         display: block;     
-    }    
+    }           
 }
 
 .trash {    
