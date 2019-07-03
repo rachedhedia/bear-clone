@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import './component.scss';
+import firebase from 'firebase/app'
 
 function handleUpDownKeyBoardInput(event, props, areFoldersExpanded)
 {
@@ -119,7 +120,7 @@ class NavigationPanel extends React.Component {
             <nav>
         <div className="settings-panel">
             <span className="icon-connected"></span>
-            <a href="#" className="icon-settings" onClick={() => alert('settings')}></a>
+            <a href="#" className="icon-settings" onClick={() => firebase.auth().signOut()}></a>
         </div>
         <div className="categories">
             <div className="folders">                

@@ -7,8 +7,11 @@
   "license": "MIT",
   "dependencies": {
     "css": "^2.2.4",
+    "firebase": "^6.2.4",
+    "firebaseui": "^4.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-firebaseui": "^3.1.2",
     "react-simplemde-editor": "^4.0.3"
   },
   "devDependencies": {
@@ -16,6 +19,7 @@
     "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
+    "firebase-tools": "^7.0.2",
     "parcel-bundler": "^1.12.3",
     "react-hot-loader": "^4.12.0",
     "sass": "^1.22.2"
