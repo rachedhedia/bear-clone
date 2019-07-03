@@ -120,7 +120,7 @@ class NavigationPanel extends React.Component {
             <nav>
         <div className="settings-panel">
             <span className="icon-connected"></span>
-            <a href="#" className="icon-settings" onClick={() => firebase.auth().signOut()}></a>
+            <a href="#" className="icon-settings" onClick={() => alert('settings')}></a>
         </div>
         <div className="categories">
             <div className="folders">                
@@ -146,7 +146,9 @@ class NavigationPanel extends React.Component {
                         {this.state.tagsExpanded === true && renderSubTags()}                                            
                     </li>            
         </ul>
-    
+            <div className="logout-section">
+                <a href="#" className="logout-button" onClick={() => firebase.auth().signOut()}>Log out</a>
+            </div>
     </nav>
         )
     }   

@@ -28,7 +28,9 @@ height: 100vh;
 // Navigation panel
 nav {
     background-color: #2E3235;
-    color: #B4B3B2;            
+    color: #B4B3B2;    
+    height: 100vh;
+    position: relative;        
 }
 
 .settings-panel {
@@ -184,4 +186,28 @@ nav {
         margin: 0 auto;
         grid-area: tag-icon;
     }
+}
+
+.logout-section {
+    margin-top: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-content: center;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
+.logout-button {
+    font-size: 0.8em;
+    border: 1px white solid;
+    border-radius: 5px;
+    background-color: rgb(241, 75, 77);
+    color: white;
+    text-align: center;
+    width: 6em;
+    height: 0.8em;
+    display: block;        
+    padding: 0.4em 0em;    
+    margin-right: 10px;
+    margin-bottom: 10px;
 }

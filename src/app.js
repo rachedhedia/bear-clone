@@ -75,6 +75,26 @@ function App() {
     }
     );
 
+    function createNewDocument() {
+        const newDocumentId = data.documents.map(document => document.id).sort().pop() + 1;
+        console.log(data.documents.map(document => document.id).sort());
+        console.log(newDocumentId);
+        const targetFolderId = 2; 
+
+        setData(
+            {documents: [
+                {
+                    date: "1d",
+                    id: newDocumentId,
+                    folderId: targetFolderId,                    
+                    content: "New document\n"
+                }
+            ].concat(data.documents),
+            folders: data.folders});        
+
+        setActiveDocumentId(newDocumentId);
+    }
+
     const selectedFoldersIds = buildSelectedFoldersIds(data.folders, activeFolderId);
     const selectedDocuments = data.documents.filter(document => selectedFoldersIds.includes(document.folderId));
     const activeDocument = selectedDocuments.find(document => document.id === activeDocumentId);
@@ -90,7 +110,7 @@ function App() {
         return (
             <div className="application-root">
                 <NavigationPanel activeFolderId={activeFolderId} folders={data.folders} setActiveFolderId={setActiveFolderId}></NavigationPanel>
-                <DocumentsPanel documents={selectedDocuments} activeDocumentId={activeDocumentId} setActiveDocumentId={setActiveDocumentId}></DocumentsPanel>
+                <DocumentsPanel documents={selectedDocuments} activeDocumentId={activeDocumentId} setActiveDocumentId={setActiveDocumentId} createNewDocument={createNewDocument}></DocumentsPanel>
                 <DocumentPanel documentUniqueId={activeDocumentId} documentContent={activeDocumentContent} setActiveDocumentContent={(newContent) => setData(regenerateDatas(data, activeDocumentId, newContent))}></DocumentPanel>
     
             </div>

@@ -1,9 +1,9 @@
 documents:
   - date: 1y
     folderId: 2
-    id: 1
-    title: Project Title
+    id: 1    
     content: |
+        Project Title
         One Paragraph of project description goes here
 
         ## Getting Started
@@ -93,16 +93,16 @@ documents:
 
   - date: 1y
     id: 2
-    folderId: 3
-    title: 'Concurrency - monothread'
+    folderId: 3    
     content: |
+      Concurrency - monothread
       #draft
       Concurrency and monothreading
   - date: 1y
     id: 3
     folderId: 2
-    title: Small writing test with Bear Notes
     content: |
+      Small writing test with Bear Notes
       Bear note is a simple note taking app. It works only on Mac devices. Free version doesn’t sync your work. Paid version do.
       The application is very well designed. It’s one of it’s main strength. It’s classification system is another strength of the app. 
               
