@@ -11,8 +11,8 @@ function DocumentsPanel(props) {
         <a href="#" className="search-button" />
     </section>
     <ul>        
-    {props.documents.map((document, index) =>
-        <li key={document.title} className={index === props.activeDocumentIndex ? "document-preview document-preview__active" : "document-preview"} onClick={() => props.setActiveDocumentIndex(index)}>
+    {props.documents.map((document) =>
+        <li key={document.title} className={document.id === props.activeDocumentId ? "document-preview document-preview__active" : "document-preview"} onClick={() => props.setActiveDocumentId(document.id)}>
             <div className="document-date">{document.date}</div>
             <h2 className="document-preview-title">{document.title}</h2>
             <p className="document-preview-content">{document.content.substring(0, 70) + '...'}</p>

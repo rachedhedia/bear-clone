@@ -1,15 +1,59 @@
 import React, {useState} from 'react';
 import './component.scss';
 
+function handleUpDownKeyBoardInput(event, props, areFoldersExpanded)
+{
+    const foldersList = props.folders.flatMap((folder) => {
+        let foldersList = [folder];
+        if(folder.hasOwnProperty('subfolders') && areFoldersExpanded)
+        {
+            foldersList = foldersList.concat(folder.subfolders);            
+            
+        }
+        return foldersList;
+    });
+
+    if(event.key == 'ArrowDown')
+    {
+        const currentFolderIndex = foldersList.findIndex(folder => folder.id === props.activeFolderId);        
+        const nextFolderIndex = currentFolderIndex < foldersList.length - 1 ? currentFolderIndex + 1 : 0;
+        props.setActiveFolderId(foldersList[nextFolderIndex].id);
+    }
+    if(event.key == 'ArrowUp')
+    {
+        const currentFolderIndex = foldersList.findIndex(folder => folder.id === props.activeFolderId);        
+        const prevFolderIndex = currentFolderIndex > 0  ? currentFolderIndex - 1 : foldersList.length - 1;        
+        props.setActiveFolderId(foldersList[prevFolderIndex].id);
+    }
+}
+
+function handleKeyboardInput(event, props, areFoldersExpanded, setFoldersExpanded)
+{
+    handleUpDownKeyBoardInput(event, props, areFoldersExpanded);
+    if(event.key == 'ArrowRight')
+    {
+        setFoldersExpanded(true);
+    }
+    if(event.key == 'ArrowLeft')
+    {
+        setFoldersExpanded(false);
+    }
+}
+
 function renderSubFolders(props)
 {   
-    const subfolders = props.folders.map((folder) => 
-        <li key={folder}>
+    const subfolders = props.folders.
+    filter(folder => folder.label === 'notes').
+    map(folder => folder.subfolders).pop().
+    map(folder =>     
+        <li key={folder.id}>
+        <a href="#"  className={folder.id === props.activeFolderId ? "nav-item-active" :""} onClick={() => props.setActiveFolderId(folder.id)} onKeyDown={(event) => handleUpDownKeyBoardInput(event, props, true)}> 
             <span className="icon-folder-untagged"></span>
-            <span className="folder-label">{folder}</span>
+            <span className="folder-label">{folder.label}</span>
+        </a>
         </li>
-    );    
-    
+    );      
+
     return (<ul>            
         {subfolders}
     </ul>     );
@@ -38,17 +82,17 @@ function NavigationPanel(props) {
     </div>
     <div className="categories">
         <div className="folders">
-            <div className="folders-header">
-                    <a href="#" className="icon-folder-unexpanded" onClick={() => setFoldersExpanded(!foldersExpanded)}></a>
+            <a href="#" className={props.activeFolderId === props.folders.filter(folder => folder.label === 'notes').pop().id ? "folders-header nav-item-active" : "folders-header"} onClick={() => props.setActiveFolderId(props.folders.filter(folder => folder.label === 'notes').pop().id)} onKeyDown={(event) => handleKeyboardInput(event, props, foldersExpanded, setFoldersExpanded)}>
+                    <span href="#" className="icon-folder-unexpanded" onClick={() => setFoldersExpanded(!foldersExpanded)}></span>
                     <span className="icon-folder-notes" ></span>
                     <span className="folders-header-caption">Notes</span>                
-            </div>    
+            </a>    
             {foldersExpanded === true && renderSubFolders(props)}                                                             
         </div>
-        <div className="trash">
+        <a href="#" className={props.activeFolderId === props.folders.filter(folder => folder.label === 'trash').pop().id ? "trash nav-item-active"  : "trash"} onClick={() => props.setActiveFolderId(props.folders.filter(folder => folder.label === 'trash').pop().id)} onKeyDown={(event) => handleUpDownKeyBoardInput(event, props, foldersExpanded)}>
                 <span className="icon-trash"></span>
                 <span className="trash-caption">trash</span>
-            </div>         
+            </a>         
         </div>           
             <ul className="tags">
                 <li>

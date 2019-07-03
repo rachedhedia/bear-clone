@@ -53,6 +53,11 @@ nav {
 
 }
 
+.nav-item-active {
+    background-color: rgb(241, 75, 77);
+    color: white;
+}
+
 .folders {
     
     .folders-header
@@ -84,7 +89,7 @@ nav {
             margin: 0 0 0 0.3em;      
             cursor: default;           
         }
-    }
+    }    
 
     ul {        
         display: grid;
@@ -92,7 +97,9 @@ nav {
     }   
 
     li {
-        padding: 0.5em 0;
+        
+        a {
+            padding: 0.5em 0;
         display: grid;
         grid-template-columns: 3.2em 2em auto;
         grid-template-areas: ". icon label";
@@ -103,6 +110,7 @@ nav {
             grid-area: label;
             text-transform: capitalize;
             cursor: default;
+        }
         }
     }
 
