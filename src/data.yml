@@ -2,124 +2,102 @@ documents:
   - date: 1y
     folderId: 2
     id: 1
-    title: Itinéraires - idées
+    title: Project Title
     content: |
-      _*Zip Cheap 2 - à partir de 1629€, 4 arrêts possibles (= 5 vols)*_
-          
-      Paris - Tokyo
-      Manille - Cairns
-      Auckland-Iles Cook (Papeete en option)
-      Iles Cook - Buenos Aires
-      Buenos Aires - Paris
-          
-      _*_A ajouter séparément":"_*_
-          
-      * Osaka - Shanghai - 95€
-      * Hong Kong - Katmandou - 220€
-      * Katmandou - Bangkok - 129€
-      * Bangkok - Rangoon - 40€
-      * Rangoon - Siem Reap - 40€
-      * Ho Chi Minh - Manille - 75€
-      * Manille - Melbourne - 130€
-      * Melbourne- Alice Springs - 130€
-      * Alice Springs - Cairns - 230€
-      * Sydney - Christchurch - 85€
-      Total ":" 1174€
-      *Total billets (sans Papeete, sans ile de pâques mais avec Iles Cook) ":" 2803€*
-      *Total billets (avec Papeete, sans ile de pâques) ":" ?*
-          
-      _*Zip cool 3 - à partir de 2149€, 6 arrêts possibles (Papeete non inclus - 600€ pour l’inclure - total 2749€)*_==> pas très interessant, un arrêt obligatoire en Amérique du nord
-          
-      Paris - Katmandou (supplément) ou Paris - Tokyo sans supplément
-      Manille - Cairns
-      Auckland - Santiago
-      Santiago - Ile de pâques (en option)
-      Ile de pâques - Santiago
-      Buenos Aires - Paris
-          
-      _*_A ajouter séparément":"_*_
-          
-      *Si arrivée à Katmandou":"*
-      * Katmandou - Tokyo - 230€
-      * Osaka - Shanghai - 95€
-      * Hong Kong - Bangkok - 70€
-      * Bangkok - Rangoon - 40€
-      * Rangoon - Siem Reap - 40€
-      * Ho Chi Minh - Manille - 75€
-      * Sydney - Alice Springs - 130€
-      * Alice Springs - Melbourne - 130€
-      * Melbourne - Christchurch - 120€
-      Total ":" 930€
-      *Total billets (sans Papeete) ":" 3070 (+ supplément Katmandou)*
-      *Total billets (avec Papeete) ":" 3670 (+ supplément Katmandou)*
-          
-      *Si arrivée à Tokyo":"*
-      * Osaka - Shanghai - 95€
-      * Hong Kong - Katmandou - 220€
-      * Katmandou - Bangkok - 129€
-      * Bangkok - Rangoon - 40€
-      * Rangoon - Siem Reap - 40€
-      * Ho Chi Minh - Manille - 75€
-      * Sydney - Alice Springs - 130€
-      * Alice Springs - Melbourne - 130€
-      * Melbourne - Christchurch - 120€
-      Total ":" 979€
-      *Total billets (sans Papeete) ":" 3128*
-      *Total billets (avec Papeete) ":" 3728*
-              
-      Note ":" Changement des dates des vols sans frais.
-              
-      _*Zip cool 4 - à partir de 2399€, 6 arrêts possibles => Ca marche pas, cette offre comprends pas l’Amérique du Sud*_
-              
-      _*Zip cool 5 - à partir de 2729€, 5 arrêt possibles.*_
-              
-      Paris — Katmandou (supplément)
-      Manille - Cairns
-      Auckland - Papeete
-      Papeete - Ile de pâques
-      Ile de pâques - Santiago
-      Buenos Aires - Paris
-              
-      _A ajouter séparément":"_
-              
-      Katmandou - Tokyo
-      Osaka-Shanghai
-      Hong Kong - Bangkok
-      Bangkok - Rangoon
-      Rangoon - Siem Reap
-      Ho Chi Minh - Manille
-      Sydney - Alice Springs
-      Alice Springs Melbourne
-      Melbourne - Christchurch
-              
-      _*Zip cool 7 - à partir de 3149€*_
-              
-      Paris - Katmandou
-      Katmandou - Tokyo
-      Manille - Cairns
-      Auckland - Papeete
-      Papeete - Ile de pâques
-      Ile de pâques - Santiago
-      Buenos Aires - Paris
-              
-      _A ajouter séparément":"_
-              
-      Osaka - Shanghai
-      Hong Kong - Bangkok
-      Bangkok - Rangoon
-      Rangoon - Siem Reap
-      Ho Chi Minh - Manille
-      Sydney - Alice Springs
-      Alice Springs - Melbourne
-      Melbourne - Christchurch
+        One Paragraph of project description goes here
+
+        ## Getting Started
+
+        These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+
+        ### Prerequisites
+
+        What things you need to install the software and how to install them
+
+        ```
+        Give examples
+        ```
+
+        ### Installing
+
+        A step by step series of examples that tell you how to get a development env running
+
+        Say what the step will be
+
+        ```
+        Give the example
+        ```
+
+        And repeat
+
+        ```
+        until finished
+        ```
+
+        End with an example of getting some data out of the system or using it for a little demo
+
+        ## Running the tests
+
+        Explain how to run the automated tests for this system
+
+        ### Break down into end to end tests
+
+        Explain what these tests test and why
+
+        ```
+        Give an example
+        ```
+
+        ### And coding style tests
+
+        Explain what these tests test and why
+
+        ```
+        Give an example
+        ```
+
+        ## Deployment
+
+        Add additional notes about how to deploy this on a live system
+
+        ## Built With
+
+        * [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
+        * [Maven](https://maven.apache.org/) - Dependency Management
+        * [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+
+        ## Contributing
+
+        Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+
+        ## Versioning
+
+        We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+
+        ## Authors
+
+        * **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+
+        See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+
+        ## License
+
+        This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+        ## Acknowledgments
+
+        * Hat tip to anyone whose code was used
+        * Inspiration
+        * etc
+
 
   - date: 1y
     id: 2
     folderId: 3
-    title: 'Concurrence - monothread'
+    title: 'Concurrency - monothread'
     content: |
       #draft
-      Si le titre de l’article vous parait contradictoire
+      Concurrency and monothreading
   - date: 1y
     id: 3
     folderId: 2
