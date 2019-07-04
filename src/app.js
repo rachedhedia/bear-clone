@@ -5,6 +5,7 @@ import DocumentsPanel from './documents-panel/component.js'
 import DocumentPanel from './document-panel/component.js'
 import loadedData from './data.yml'
 
+
 function regenerateDatas(data, activeDocumentId, newContent) {
     return {
         ...data,
@@ -46,11 +47,20 @@ function App(props) {
     useEffect(() => {        
          
         if(!data.loaded)
-        {                     
-            setData({documents: loadedData.documents.filter(document => document.owner === props.userEmail), folders: loadedData.folders, loaded: true});                                    
+        {
+            let db = props.firebase.firestore();
+            db.collection("documents").where("owner", "==", props.userEmail).get().
+            then((querySnapshot) => 
+            {
+                let loadedDocuments = [];
+                querySnapshot.forEach(doc => loadedDocuments.push({...doc.data(), content: doc.data().content.replace(/\\n/g, "\n")}));                
+                console.log(loadedDocuments);
+                setData({documents: loadedDocuments, folders: loadedData.folders, loaded: true});
+            });                                                                     
         }              
         
         const selectedDocuments = data.documents.filter(document => selectedFoldersIds.includes(document.folderId));
+        console.log('selected documents: ' + selectedDocuments);
         let activeDocument = selectedDocuments.find(document => document.id === activeDocumentId);
         if (activeDocument === undefined) {
             if (selectedDocuments.length > 0)
@@ -70,6 +80,7 @@ function App(props) {
         setData(
             {documents: [
                 {
+                    owner: props.userEmail,
                     date: "1d",
                     id: newDocumentId,
                     folderId: targetFolderId,                    

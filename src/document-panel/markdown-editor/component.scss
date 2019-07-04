@@ -3,6 +3,10 @@
     padding: 2em;
 }
 
+.CodeMirror-scroll {
+    border: 0px
+}
+
 .editor-toolbar {
     border: 0px hidden;
     border-bottom: 1px solid #ddd;

@@ -25,14 +25,14 @@ function Login()
             setUser(user);       
         });
     });
-
+    
     if(!user)
     {
         return <StyledFirebaseAuth uiConfig={firebaseSigninConfig} firebaseAuth={firebase.auth()}/>
     }
     else
     {
-        return <App userEmail={user.email}></App>
+        return <App firebase={firebase} userEmail={user.email}></App>
     }    
 }
 export default Login
