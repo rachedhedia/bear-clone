@@ -1,5 +1,6 @@
+
 import React, {useState} from 'react';
-import './component.scss';
+import './NavigationPanel.scss';
 import firebase from 'firebase/app'
 
 function handleUpDownKeyBoardInput(event, props, areFoldersExpanded)

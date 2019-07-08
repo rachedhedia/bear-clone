@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './component.scss'
+import './DocumentsPanel.scss'
 
 function DocumentsPanel(props) {               
 

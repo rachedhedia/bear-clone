@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
-import "./component.scss"
+import "./MarkdownEditor.scss"
 
 function MarkdownEditor(props)
 {

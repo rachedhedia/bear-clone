@@ -1,6 +1,6 @@
 import React from 'react'
-import MarkdownEditor from './markdown-editor/component.js'
-import './component.scss'
+import MarkdownEditor from './markdown-editor/MarkdownEditor.js'
+import './DocumentPanel.scss'
 
 function DocumentPanel(props)
 {
