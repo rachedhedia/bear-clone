@@ -1,6 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Login from './login.js'
+import {applicationReducer, foldersReducer, documentsReducer, documentReducer} from './reducers'
+import { createStore, combineReducers, applyMiddleware} from 'redux';
+import { Provider } from "react-redux";
+import thunkMiddleware from 'redux-thunk';
+import { createLogger } from 'redux-logger'
 
 /*
 {
@@ -140,8 +145,26 @@ représenter des flux d'évènements (notion d'évènement dans le temps, avec d
 
 */
 
+const loggerMiddleware = createLogger()
 
-ReactDOM.render(<Login />, document.getElementById('root'));
+let store = createStore(
+    combineReducers({
+    applicationState: applicationReducer,
+    foldersPanel: foldersReducer,
+    documentsFolder: documentsReducer,
+    document: documentReducer
+    }), 
+    applyMiddleware(
+      thunkMiddleware,
+      loggerMiddleware
+    )
+  );
+
+ReactDOM.render(
+<Provider store={store}>
+    <Login />
+</Provider>, 
+  document.getElementById('root'));
 
 if (module.hot) {
     module.hot.accept()

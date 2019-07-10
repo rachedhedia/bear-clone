@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
+import {connect} from 'react-redux'
 import './css/main.scss'
 import NavigationPanel from './navigation-panel/NavigationPanel.js'
 import DocumentsPanel from './documents-panel/DocumentsPanel.js'
 import DocumentPanel from './document-panel/DocumentPanel.js'
 import loadedData from './data.yml'
-
+import {loadData} from './actions'
 
 function regenerateDatas(data, activeDocumentId, newContent) {
     return {
@@ -37,7 +38,19 @@ function buildSelectedFoldersIds(folders, activeFolderId)
     return selectedFoldersIds;
 }
 
-function App(props) {
+function mapStateToProps(state) {
+    return {
+        initialLoadDone: state.applicationState.initialLoadDone
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        loadData: (userEmail, firestore) => dispatch(loadData(userEmail, firestore))
+    }
+}
+
+function ConnectedApp(props) {
 
     
     const [data, setData] = useState({documents: [], folders: loadedData.folders, loaded: false});
@@ -46,7 +59,13 @@ function App(props) {
     
     useEffect(() => {        
          
-        if(!data.loaded)
+        if(!props.initialLoadDone) {
+            console.log('performing initial load');
+            console.log(props.userEmail);
+            
+            props.loadData(props.userEmail, props.firebase.firestore());
+        }
+        /*if(!data.loaded)
         {
             let db = props.firebase.firestore();
             db.collection("documents").where("owner", "==", props.userEmail).get().
@@ -67,7 +86,7 @@ function App(props) {
                 setActiveDocumentId(selectedDocuments[0].id);
             else
                 setActiveDocumentId(-1);
-        }
+        }*/
     }
     );
 
@@ -100,12 +119,13 @@ function App(props) {
     
         return (
             <div className="application-root">
-                <NavigationPanel activeFolderId={activeFolderId} folders={data.folders} setActiveFolderId={setActiveFolderId}></NavigationPanel>
-                <DocumentsPanel documents={selectedDocuments} activeDocumentId={activeDocumentId} setActiveDocumentId={setActiveDocumentId} createNewDocument={createNewDocument}></DocumentsPanel>
+                <NavigationPanel></NavigationPanel>
+                <DocumentsPanel></DocumentsPanel>
                 <DocumentPanel documentUniqueId={activeDocumentId} documentContent={activeDocumentContent} setActiveDocumentContent={(newContent) => setData(regenerateDatas(data, activeDocumentId, newContent))}></DocumentPanel>
     
             </div>
         )    
 }
 
+const App = connect(mapStateToProps, mapDispatchToProps)(ConnectedApp);
 export default App
