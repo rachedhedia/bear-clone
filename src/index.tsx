@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Login from './login.js'
+import Login from './login'
 import {applicationReducer, foldersReducer, documentsReducer, documentReducer} from './reducers'
 import { createStore, combineReducers, applyMiddleware} from 'redux';
 import { Provider } from "react-redux";
@@ -151,8 +151,7 @@ let store = createStore(
     combineReducers({
     applicationState: applicationReducer,
     foldersPanel: foldersReducer,
-    documentsFolder: documentsReducer,
-    document: documentReducer
+    documentsFolder: documentsReducer    
     }), 
     applyMiddleware(
       thunkMiddleware,

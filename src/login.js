@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import App from './app.js'
+import App from './app'
 import firebase from 'firebase'
 import firebaseConfig from './firebaseconfig.json'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';

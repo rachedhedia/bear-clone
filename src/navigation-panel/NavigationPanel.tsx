@@ -1,10 +1,11 @@
 
 import React, {useState} from 'react';
 import './NavigationPanel.scss';
-import firebase from 'firebase/app'
-import { dispatch } from 'redux';
+import firebase  from 'firebase/app'
 import { connect } from 'react-redux';
 import {expandFolders, collapseFolders, toggleFoldersCollapse, toggleTagsCollapse, selectFolder, selectNextFolder, selectPreviousFolder} from '../actions';
+import foldersTree from '../folders-tree';
+import {Folder} from '../types';
 
 function handleUpDownKeyBoardInput(event, props)
 {
@@ -44,9 +45,14 @@ function renderSubTags(props) {
     );
 }
 
+function computeFoldersTree(expandedFoldersTree : Array<Folder>, foldersAreExpanded : boolean)
+{
+    return foldersAreExpanded ? expandedFoldersTree : expandedFoldersTree.map(folder => folder);
+}
+
 function mapStateToProps(state) {
     return {
-        foldersTree: state.foldersPanel.foldersTree,
+        foldersTree: computeFoldersTree(foldersTree, state.foldersPanel.foldersExpanded),
         foldersExpanded: state.foldersPanel.foldersExpanded,
         tagsExpanded: state.foldersPanel.tagsExpanded,
         selectedFolderId: state.foldersPanel.selectedFolderId
@@ -66,6 +72,9 @@ function mapDispatchToProps(dispatch) {
 }
 
 class ConnectedNavigationPanel extends React.Component {
+
+    //focusedElementRef : any;
+    //props: any;
 
     constructor(props) {
         super(props);
@@ -98,7 +107,7 @@ class ConnectedNavigationPanel extends React.Component {
     const subfolders = props.foldersTree.find(x => x.name === "notes").subfolders
     .map(folder =>     
         <li key={folder.id}>
-        <a href="#"  className={folder.id === props.selectedFolderId ? "nav-item-active" :""} ref={props.selectedFolderId ===  folder.id ? this.focusedElementRef : ""} onClick={() => props.selectFolder(folder.id)} onKeyDown={(event) => handleUpDownKeyBoardInput(event, props, true)}> 
+        <a href="#"  className={folder.id === props.selectedFolderId ? "nav-item-active" :""} ref={props.selectedFolderId ===  folder.id ? this.focusedElementRef : ""} onClick={() => props.selectFolder(folder.id)} onKeyDown={(event) => handleUpDownKeyBoardInput(event, props)}> 
             <span className="icon-folder-untagged"></span>
             <span className="folder-label">{folder.name}</span>
         </a>
@@ -113,9 +122,7 @@ class ConnectedNavigationPanel extends React.Component {
     render() {
         const props = this.props;        
         const notesFolderId = props.foldersTree.find(x => x.name === "notes").id;        
-        const trashFolderId = props.foldersTree.find(x => x.name === "trash").id;
-        console.log(props.selectedFolderId);
-        console.log(notesFolderId);
+        const trashFolderId = props.foldersTree.find(x => x.name === "trash").id;        
         
         return (            
             <nav>
@@ -152,7 +159,7 @@ class ConnectedNavigationPanel extends React.Component {
                             <span className="tag-icon"></span>      
                             <span className="tag">welcome</span>
                         </span>                        
-                        {props.tagsExpanded === true && renderSubTags()}                                            
+                        {props.tagsExpanded === true && renderSubTags(this.props)}                                            
                     </li>            
         </ul>
             <div className="logout-section">

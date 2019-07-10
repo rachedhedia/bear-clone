@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import {connect} from 'react-redux'
 import './css/main.scss'
-import NavigationPanel from './navigation-panel/NavigationPanel.js'
-import DocumentsPanel from './documents-panel/DocumentsPanel.js'
-import DocumentPanel from './document-panel/DocumentPanel.js'
+import NavigationPanel from './navigation-panel/NavigationPanel'
+import DocumentsPanel from './documents-panel/DocumentsPanel'
+import DocumentPanel from './document-panel/DocumentPanel'
 import loadedData from './data.yml'
 import {loadData} from './actions'
 
