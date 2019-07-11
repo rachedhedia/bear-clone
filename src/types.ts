@@ -7,13 +7,16 @@ export interface Folder {
 export interface Document {
     owner: string,
     date: string,
-    id: number,
+    id: string,
     folderId: number,
     content: string
 };
 
 export interface ApplicationState {
-    initialLoadDone: boolean
+    idsGenerator: () => string,
+    documentsUpdateSubject: object,
+    initialLoadDone: boolean,
+    loggedUserEmail: string    
 }
 
 export interface FoldersPanelState {    
@@ -26,10 +29,10 @@ export interface DocumentsPanelState {
     searchFieldContent: string,    
     selectedFolderId: number,
     documents: Array<Document>,     
-    selectedDocumentId: number
+    selectedDocumentId: string
 }
 
-export interface GlobalState {
+export interface GlobalState {    
     applicationState: ApplicationState,
     foldersPanel: FoldersPanelState,
     documentsFolder: DocumentsPanelState

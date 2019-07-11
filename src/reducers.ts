@@ -1,30 +1,30 @@
 import {     
     DATA_LOADED,
+    USER_LOGGED,
     EXPAND_FOLDERS,
 COLLAPSE_FOLDERS,
 TOGGLE_FOLDERS_COLLAPSE,
 TOGGLE_TAGS_COLLAPSE,
 SELECT_FOLDER,
-SELECT_PREVIOUS_FOLDER, 
-SELECT_NEXT_FOLDER,
 SET_SEARCH_CRITERION,
 SELECT_DOCUMENT,
-CREATE_NEW_DOCUMENT,
+CREATE_DOCUMENT,
 UPDATE_DOCUMENT_CONTENT,
  } from "./constants";
 
+ import uuid from 'uuidv4';
+
  import foldersTree from './folders-tree'
+ import documentsUpdateSubject from './documents-update-subject'
 
- import {Folder, Document, ApplicationState, FoldersPanelState, DocumentsPanelState} from './types'
-
-let documentsCurrentId = 10;
-function getNextDocumentId() : number
-{
-    return ++documentsCurrentId;
-}
+ import {Document, ApplicationState, FoldersPanelState, DocumentsPanelState} from './types'
+ import firebase from 'firebase'
 
 const applicationState: ApplicationState = {
-    initialLoadDone : false
+    idsGenerator: uuid,
+    documentsUpdateSubject: documentsUpdateSubject,
+    initialLoadDone : false,
+    loggedUserEmail: firebase.auth().currentUser ? firebase.auth().currentUser.email : ""    
 }
 
 const foldersPanel : FoldersPanelState = {
@@ -37,11 +37,17 @@ const documentsFolder : DocumentsPanelState = {
     searchFieldContent: "",
     selectedFolderId: 0,
     documents: [],    
-    selectedDocumentId: 0
+    selectedDocumentId: ""
 };
 
 export function applicationReducer(state : ApplicationState = applicationState, action) : ApplicationState {
-    if (action.type == DATA_LOADED) {        
+    if (action.type === USER_LOGGED) {
+        return {
+            ...state,
+            loggedUserEmail : action.loggedUserEmail
+        }
+    }
+    else if (action.type == DATA_LOADED) {        
         return {
             ...state,
             initialLoadDone: true
@@ -89,11 +95,11 @@ function getSelectedDocuments(documents : Array<Document>, selectedFolderId : nu
         filter(doc => doc.content.includes(searchFieldContent));
 }
 
-function getSelectedDocumentId(documents : Array<Document>, selectedFolderId : number, searchFieldContent : string, selectedDocumentId : number)
+function getSelectedDocumentId(documents : Array<Document>, selectedFolderId : number, searchFieldContent : string, selectedDocumentId : string) : string
 {
     const selectedDocuments = getSelectedDocuments(documents, selectedFolderId, searchFieldContent);    
     return selectedDocuments.find(d => d.id === selectedDocumentId) === undefined ? 
-        ((selectedDocuments.length > 0) ? selectedDocuments[0].id : -1) :
+        ((selectedDocuments.length > 0) ? selectedDocuments[0].id : "") :
         selectedDocumentId;
 }
 
@@ -124,15 +130,15 @@ export function documentsReducer(state : DocumentsPanelState = documentsFolder, 
             searchFieldContent: state.searchFieldContent
         }
     }
-    else if (action.type === CREATE_NEW_DOCUMENT) {
+    else if (action.type === CREATE_DOCUMENT) {
         return {
             ...state,
-            documents: state.documents.concat({ owner: "", date: "1y", folderId: state.selectedFolderId, id: getNextDocumentId(), content: "" })
+            documents: state.documents.concat(action.newDocument)
         }
     }
     else if (action.type === UPDATE_DOCUMENT_CONTENT) {
         return {...state,
-                documents: state.documents.map(x => x.id != action.id ? x : {...x, content: action.content})
+                documents: state.documents.map(x => x.id !== action.id ? x : {...x, content: action.content})
         }
     }
 

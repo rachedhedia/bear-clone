@@ -8,7 +8,7 @@ function DocumentPanel(props)
 return (
 <section className="document-content-panel">
     <div className="document-content">
-    <MarkdownEditor documentUniqueId={props.documentUniqueId} documentContent={props.documentContent} setActiveDocumentContent={props.setActiveDocumentContent}></MarkdownEditor>                   
+    <MarkdownEditor></MarkdownEditor>                   
     </div>
     
 </section>)

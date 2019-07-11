@@ -1,5 +1,5 @@
-import { 
-    LOAD_DATA,
+import {     
+    USER_LOGGED,
     DATA_LOADED,
     TOGGLE_FOLDERS_COLLAPSE, 
     EXPAND_FOLDERS,
@@ -8,7 +8,7 @@ import {
     SELECT_FOLDER,     
     SET_SEARCH_CRITERION, 
     SELECT_DOCUMENT, 
-    CREATE_NEW_DOCUMENT, 
+    CREATE_DOCUMENT, 
     UPDATE_DOCUMENT_CONTENT    
 } from './constants';
 import {GlobalState} from './types'
@@ -18,15 +18,22 @@ import {Folder, Document} from './types'
 
 export function loadData(userEmail : string, firestore : any) : (dispatch: any) => any {
     return dispatch => {        
-        firestore.collection("documents").where("owner", "==", userEmail).get().
-            then((querySnapshot) => 
+        firestore.collection("documents").where("owner", "==", userEmail).onSnapshot(
+            (querySnapshot) => 
             {                
                 let loadedDocuments = [];
-                querySnapshot.forEach(doc => loadedDocuments.push({...doc.data(), content: doc.data().content.replace(/\\n/g, "\n")}));                
-                console.log(loadedDocuments);
+                querySnapshot.forEach(doc => loadedDocuments.push({...doc.data(), content: doc.data().content.replace(/\\n/g, "\n")}));                                
                 dispatch(dataLoaded(loadedDocuments));
             });                                                                    
     }    
+}
+
+export function setLoggedUserEmail(loggedUserEmail : string) 
+{
+    return {
+        type: USER_LOGGED,
+        loggedUserEmail : loggedUserEmail
+    }
 }
 
 export function dataLoaded(documents : Array<Document>) {    
@@ -120,16 +127,44 @@ export function selectDocument(documentId : number) {
     }
 }
 
-export function createNewDocument() {
-    return {
-        type: CREATE_NEW_DOCUMENT
+function getFirstLeafFolderId(selectedFolderId : number) : number {
+    const flatFoldersList = foldersTree.flatMap((folder) => folder.subfolders ? [folder].concat(folder.subfolders) : [folder]);
+    return flatFoldersList.filter(x => x.id === selectedFolderId).
+        map(folder => folder.subfolders ? folder.subfolders[0] : folder)[0].id;
+}
+
+export function createDocument() {
+    return (dispatch : any, getState : () => GlobalState) => {
+        const globalState : GlobalState = getState();
+        const newDocument = { 
+            owner: globalState.applicationState.loggedUserEmail, 
+            date: "1y", 
+            folderId: getFirstLeafFolderId(globalState.documentsFolder.selectedFolderId), 
+            id: globalState.applicationState.idsGenerator(),
+            content: ""
+        }
+
+        const payload = {
+            type: CREATE_DOCUMENT,
+            newDocument: newDocument            
+        };
+
+        dispatch(payload);
+
+        globalState.applicationState.documentsUpdateSubject.next(payload);
     }
 }
 
-export function updateDocumentContent(id : number, content : string) {
-    return {
-        type: UPDATE_DOCUMENT_CONTENT,
-        id: id,
-        content: content
+export function updateDocumentContent(id : string, content : string) {
+    return (dispatch: any, getState : () => GlobalState) => {
+        const GlobalState : GlobalState = getState();
+        const payload = {
+            type: UPDATE_DOCUMENT_CONTENT,
+            id: id,
+            content: content
+        };
+        
+        dispatch (payload);
+        GlobalState.applicationState.documentsUpdateSubject.next(payload);        
     }
 }

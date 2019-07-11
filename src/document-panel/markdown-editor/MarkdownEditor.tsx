@@ -17,9 +17,9 @@ function getSelectedDocuments(documents : Array<Document>, selectedFolderId : nu
         filter(doc => doc.content.includes(searchFieldContent));
 }
 
-function getDocumentContent(documents : Array<Document>, selectedDocumentId : number, selectedFolderId, searchFieldContent) {
+function getDocumentContent(documents : Array<Document>, selectedDocumentId : string, selectedFolderId, searchFieldContent) {
     const selectedDocuments = getSelectedDocuments(documents, selectedFolderId, searchFieldContent);    
-    const foundDocument = selectedDocuments.find(d => d.id == selectedDocumentId);    
+    const foundDocument = selectedDocuments.find(d => d.id === selectedDocumentId);    
     
     const documentContent = foundDocument === undefined ? "" : foundDocument.content;        
     return documentContent;
@@ -32,16 +32,16 @@ function mapStateToProps(state : GlobalState) {
     }
 }
 
-function mapDispatchToProps(dispatch: any, ownProps: any) {
+function mapDispatchToProps(dispatch: any) {
     return {
-        updateDocumentContent : (content : string) => dispatch(updateDocumentContent(ownProps.selectedDocumentId, content))
+        updateDocumentContent : (id: string, content : string) => dispatch(updateDocumentContent(id, content))
     };
 }
 
 function ConnectedMarkdownEditor(props)
 {
     /* The key tag is added to fix a bug in the markdown editor causing it not to correctly update when switching back to the original value : cf https://github.com/RIP21/react-simplemde-editor/issues/79*/
-    return (<SimpleMDE key={props.selectedDocumentId} value={props.documentContent} onChange={(value) => props.updateDocumentContent(value)}/>);
+    return (<SimpleMDE key={props.selectedDocumentId} value={props.documentContent} onChange={(value) => props.updateDocumentContent(props.selectedDocumentId, value)}/>);
 }
 
 const MarkdownEditor = connect(mapStateToProps, mapDispatchToProps)(ConnectedMarkdownEditor);
