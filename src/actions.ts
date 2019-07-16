@@ -22,7 +22,7 @@ export function loadData(userEmail : string, firestore : any) : (dispatch: any) 
             (querySnapshot) => 
             {                
                 let loadedDocuments = [];
-                querySnapshot.forEach(doc => loadedDocuments.push({...doc.data(), content: doc.data().content.replace(/\\n/g, "\n")}));                                
+                querySnapshot.forEach(doc => loadedDocuments.push({...doc.data(), id: doc.id, content: doc.data().content.replace(/\\n/g, "\n")}));                                
                 dispatch(dataLoaded(loadedDocuments));
             });                                                                    
     }    
@@ -33,6 +33,27 @@ export function setLoggedUserEmail(loggedUserEmail : string)
     return {
         type: USER_LOGGED,
         loggedUserEmail : loggedUserEmail
+    }
+}
+
+export function exitApplication() {
+    return (_, getState) => {
+        const GlobalState : GlobalState = getState();         
+        
+        if(GlobalState.applicationState.initialLoadDone)
+        {            
+            GlobalState.applicationState.applicationExitSubject.next("");                
+        }
+            
+    }
+}
+
+export function logOut() {
+    return (_, getState) => {
+        const GlobalState : GlobalState = getState();
+
+        GlobalState.applicationState.firebase.auth().signOut();
+        GlobalState.applicationState.applicationExitSubject.next("");                
     }
 }
 
@@ -120,7 +141,7 @@ export function setSearchCriterion(searchCriterion : string) {
     }
 }
 
-export function selectDocument(documentId : number) {
+export function selectDocument(documentId : string) {
     return {
         type: SELECT_DOCUMENT,
         documentId: documentId
@@ -150,8 +171,8 @@ export function createDocument() {
         };
 
         dispatch(payload);
-
         globalState.applicationState.documentsUpdateSubject.next(payload);
+        dispatch(selectDocument(newDocument.id));
     }
 }
 
@@ -165,6 +186,8 @@ export function updateDocumentContent(id : string, content : string) {
         };
         
         dispatch (payload);
-        GlobalState.applicationState.documentsUpdateSubject.next(payload);        
+        
+        if(GlobalState.applicationState.initialLoadDone)
+            GlobalState.applicationState.documentsUpdateSubject.next(payload);        
     }
 }

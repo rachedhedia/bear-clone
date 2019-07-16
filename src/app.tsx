@@ -4,7 +4,7 @@ import './css/main.scss'
 import NavigationPanel from './navigation-panel/NavigationPanel'
 import DocumentsPanel from './documents-panel/DocumentsPanel'
 import DocumentPanel from './document-panel/DocumentPanel'
-import {loadData} from './actions'
+import {loadData, exitApplication} from './actions'
 import {GlobalState} from './types'
 
 function mapStateToProps(state : GlobalState) {
@@ -16,7 +16,8 @@ function mapStateToProps(state : GlobalState) {
 
 function mapDispatchToProps(dispatch : any) {
     return {
-        loadData: (loggedUserEmail : string, firestore : any) => dispatch(loadData(loggedUserEmail, firestore))
+        loadData: (loggedUserEmail : string, firestore : any) => dispatch(loadData(loggedUserEmail, firestore)),
+        exitApplication: () => dispatch(exitApplication())
     }
 }
 
@@ -26,7 +27,7 @@ function ConnectedApp(props) {
          
         if(!props.initialLoadDone) {            
             props.loadData(props.loggedUserEmail, props.firebase.firestore());
-        }        
+        }       
     }    
     );
         return (

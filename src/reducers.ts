@@ -15,14 +15,16 @@ UPDATE_DOCUMENT_CONTENT,
  import uuid from 'uuidv4';
 
  import foldersTree from './folders-tree'
- import documentsUpdateSubject from './documents-update-subject'
+ import {documentsUpdate$, applicationExit$} from './application-events'
 
  import {Document, ApplicationState, FoldersPanelState, DocumentsPanelState} from './types'
  import firebase from 'firebase'
 
 const applicationState: ApplicationState = {
     idsGenerator: uuid,
-    documentsUpdateSubject: documentsUpdateSubject,
+    documentsUpdateSubject: documentsUpdate$,
+    applicationExitSubject: applicationExit$,
+    firebase: firebase,
     initialLoadDone : false,
     loggedUserEmail: firebase.auth().currentUser ? firebase.auth().currentUser.email : ""    
 }

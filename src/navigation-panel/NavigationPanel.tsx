@@ -3,9 +3,10 @@ import React, {useState} from 'react';
 import './NavigationPanel.scss';
 import firebase  from 'firebase/app'
 import { connect } from 'react-redux';
-import {expandFolders, collapseFolders, toggleFoldersCollapse, toggleTagsCollapse, selectFolder, selectNextFolder, selectPreviousFolder} from '../actions';
+import {expandFolders, collapseFolders, toggleFoldersCollapse, toggleTagsCollapse, selectFolder, selectNextFolder, selectPreviousFolder, logOut} from '../actions';
 import foldersTree from '../folders-tree';
 import {Folder} from '../types';
+import { longStackSupport } from 'q';
 
 function handleUpDownKeyBoardInput(event, props)
 {
@@ -67,7 +68,8 @@ function mapDispatchToProps(dispatch) {
         toggleTagsCollapse: () => dispatch(toggleTagsCollapse()),
         selectFolder: (folderId) => dispatch(selectFolder(folderId)),
         selectNextFolder: () => dispatch(selectNextFolder()),
-        selectPreviousFolder: () => dispatch(selectPreviousFolder())
+        selectPreviousFolder: () => dispatch(selectPreviousFolder()),
+        logOut: () => dispatch(logOut())
     };
 }
 
@@ -96,8 +98,7 @@ class ConnectedNavigationPanel extends React.Component {
         }        
     }
 
-    focusFocusedElement() {
-        console.log('focus acquired');
+    focusFocusedElement() {        
         if(this.focusedElementRef.current)
             this.focusedElementRef.current.focus();
     } 
@@ -163,7 +164,7 @@ class ConnectedNavigationPanel extends React.Component {
                     </li>            
         </ul>
             <div className="logout-section">
-                <a href="#" className="logout-button" onClick={() => firebase.auth().signOut()}>Log out</a>
+                <a href="#" className="logout-button" onClick={props.logOut}>Log out</a>
             </div>
     </nav>
         )

@@ -41,7 +41,7 @@ function mapDispatchToProps(dispatch: any) {
 function ConnectedMarkdownEditor(props)
 {
     /* The key tag is added to fix a bug in the markdown editor causing it not to correctly update when switching back to the original value : cf https://github.com/RIP21/react-simplemde-editor/issues/79*/
-    return (<SimpleMDE key={props.selectedDocumentId} value={props.documentContent} onChange={(value) => props.updateDocumentContent(props.selectedDocumentId, value)}/>);
+    return (<SimpleMDE options={{status:false}} key={props.selectedDocumentId} value={props.documentContent} onChange={(value) => props.updateDocumentContent(props.selectedDocumentId, value)}/>);
 }
 
 const MarkdownEditor = connect(mapStateToProps, mapDispatchToProps)(ConnectedMarkdownEditor);

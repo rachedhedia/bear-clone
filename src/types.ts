@@ -15,6 +15,8 @@ export interface Document {
 export interface ApplicationState {
     idsGenerator: () => string,
     documentsUpdateSubject: object,
+    applicationExitSubject: object,
+    firebase: object,
     initialLoadDone: boolean,
     loggedUserEmail: string    
 }
