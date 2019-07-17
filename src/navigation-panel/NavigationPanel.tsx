@@ -1,12 +1,12 @@
 
-import React, {useState} from 'react';
+import React, {useRef, useEffect} from 'react';
 import './NavigationPanel.scss';
-import firebase  from 'firebase/app'
 import { connect } from 'react-redux';
 import {expandFolders, collapseFolders, toggleFoldersCollapse, toggleTagsCollapse, selectFolder, selectNextFolder, selectPreviousFolder, logOut} from '../actions';
 import foldersTree from '../folders-tree';
 import {Folder} from '../types';
-import { longStackSupport } from 'q';
+
+
 
 function handleUpDownKeyBoardInput(event, props)
 {
@@ -73,42 +73,12 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-class ConnectedNavigationPanel extends React.Component {
-
-    //focusedElementRef : any;
-    //props: any;
-
-    constructor(props) {
-        super(props);
-        this.focusedElementRef = React.createRef();
-        this.focusFocusedElement = this.focusFocusedElement.bind(this);
-        this.renderSubFolders = this.renderSubFolders.bind(this);        
-    }
-
-    componentDidMount()
-    {
-        this.focusFocusedElement();
-    }
-
-    componentDidUpdate(prevProps)
-    {
-        if(prevProps.selectedFolderId !== this.props.selectedFolderId)
-        {
-            this.focusFocusedElement();
-        }        
-    }
-
-    focusFocusedElement() {        
-        if(this.focusedElementRef.current)
-            this.focusedElementRef.current.focus();
-    } 
-
-    renderSubFolders() {   
-    const props = this.props;    
+function renderSubFolders(props, focusedElementRef) {   
+    
     const subfolders = props.foldersTree.find(x => x.name === "notes").subfolders
     .map(folder =>     
         <li key={folder.id}>
-        <a href="#"  className={folder.id === props.selectedFolderId ? "nav-item-active" :""} ref={props.selectedFolderId ===  folder.id ? this.focusedElementRef : ""} onClick={() => props.selectFolder(folder.id)} onKeyDown={(event) => handleUpDownKeyBoardInput(event, props)}> 
+        <a href="#"  className={folder.id === props.selectedFolderId ? "nav-item-active" :""} ref={props.selectedFolderId ===  folder.id ? focusedElementRef : null} onClick={() => props.selectFolder(folder.id)} onKeyDown={(event) => handleUpDownKeyBoardInput(event, props)}> 
             <span className="icon-folder-untagged"></span>
             <span className="folder-label">{folder.name}</span>
         </a>
@@ -120,56 +90,65 @@ class ConnectedNavigationPanel extends React.Component {
     </ul>     );
 }
 
-    render() {
-        const props = this.props;        
-        const notesFolderId = props.foldersTree.find(x => x.name === "notes").id;        
-        const trashFolderId = props.foldersTree.find(x => x.name === "trash").id;        
-        
-        return (            
-            <nav>
-        <div className="settings-panel">
-            <span className="icon-connected"></span>
-            <a href="#" className="icon-settings" onClick={() => alert('settings')}></a>
-        </div>
-        <div className="categories">
-            <div className="folders">                                
-                <a href="#" 
-                className={"folders-header" + (props.selectedFolderId === notesFolderId ? " nav-item-active" : "")} 
-                ref={props.selectedFolderId === notesFolderId ? this.focusedElementRef : ""} 
-                onClick={() => props.selectFolder(notesFolderId)} 
-                onKeyDown={(event) => handleKeyboardInput(event, props)}>
-                        <span href="#" className="icon-folder-unexpanded" onClick={props.toggleFoldersCollapse}></span>
-                        <span className="icon-folder-notes" ></span>
-                        <span className="folders-header-caption">Notes</span>                
-                </a>    
-                {props.foldersExpanded === true && this.renderSubFolders()}                                                             
-            </div>
+function focusFocusedElement(focusedElementRef) {        
+    if(focusedElementRef.current)
+        focusedElementRef.current.focus();
+} 
+
+function ConnectedNavigationPanel(props) {
+    
+    const focusedElementRef = useRef(null);
+    useEffect(() => {
+        focusFocusedElement(focusedElementRef);
+    }, [props.selectedFolderId])
+
+    const notesFolderId = props.foldersTree.find(x => x.name === "notes").id;        
+    const trashFolderId = props.foldersTree.find(x => x.name === "trash").id;        
+    
+    return (            
+        <nav>
+    <div className="settings-panel">
+        <span className="icon-connected"></span>
+        <a href="#" className="icon-settings" onClick={() => alert('settings')}></a>
+    </div>
+    <div className="categories">
+        <div className="folders">                                
             <a href="#" 
-            className={"trash" + (props.selectedFolderId === trashFolderId ? " nav-item-active" : "")} 
-            onClick={() => props.selectFolder(trashFolderId)} 
-            ref={props.selectedFolderId === trashFolderId ? this.focusedElementRef : ""} 
-            onKeyDown={(event) => handleUpDownKeyBoardInput(event, props)}>
-                    <span className="icon-trash"></span>
-                    <span className="trash-caption">trash</span>
-                </a>         
-            </div>           
-                <ul className="tags">
-                    <li>
-                        <span className="tag-level1">
-                            <a href="#" className="icon-expand" onClick={props.toggleTagsCollapse}></a>                     
-                            <span className="tag-icon"></span>      
-                            <span className="tag">welcome</span>
-                        </span>                        
-                        {props.tagsExpanded === true && renderSubTags(this.props)}                                            
-                    </li>            
-        </ul>
-            <div className="logout-section">
-                <a href="#" className="logout-button" onClick={props.logOut}>Log out</a>
-            </div>
-    </nav>
-        )
-    }   
-}
+            className={"folders-header" + (props.selectedFolderId === notesFolderId ? " nav-item-active" : "")} 
+            ref={props.selectedFolderId === notesFolderId ? focusedElementRef : null} 
+            onClick={() => props.selectFolder(notesFolderId)} 
+            onKeyDown={(event) => handleKeyboardInput(event, props)}>
+                    <span href="#" className="icon-folder-unexpanded" onClick={props.toggleFoldersCollapse}></span>
+                    <span className="icon-folder-notes" ></span>
+                    <span className="folders-header-caption">Notes</span>                
+            </a>    
+            {props.foldersExpanded === true && renderSubFolders(props, focusedElementRef)}                                                             
+        </div>
+        <a href="#" 
+        className={"trash" + (props.selectedFolderId === trashFolderId ? " nav-item-active" : "")} 
+        onClick={() => props.selectFolder(trashFolderId)} 
+        ref={props.selectedFolderId === trashFolderId ? focusedElementRef : null} 
+        onKeyDown={(event) => handleUpDownKeyBoardInput(event, props)}>
+                <span className="icon-trash"></span>
+                <span className="trash-caption">trash</span>
+            </a>         
+        </div>           
+            <ul className="tags">
+                <li>
+                    <span className="tag-level1">
+                        <a href="#" className="icon-expand" onClick={props.toggleTagsCollapse}></a>                     
+                        <span className="tag-icon"></span>      
+                        <span className="tag">welcome</span>
+                    </span>                        
+                    {props.tagsExpanded === true && renderSubTags(props)}                                            
+                </li>            
+    </ul>
+        <div className="logout-section">
+            <a href="#" className="logout-button" onClick={props.logOut}>Log out</a>
+        </div>
+</nav>
+    )
+}   
 
 const NavigationPanel = connect(mapStateToProps, mapDispatchToProps)(ConnectedNavigationPanel);
 
