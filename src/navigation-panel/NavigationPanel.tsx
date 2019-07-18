@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import {expandFolders, collapseFolders, toggleFoldersCollapse, toggleTagsCollapse, selectFolder, selectNextFolder, selectPreviousFolder, logOut} from '../actions';
 import foldersTree from '../folders-tree';
 import {Folder} from '../types';
+import {useSpring, animated} from 'react-spring'
+import useDimensions from 'react-use-dimensions'
 
 
 
@@ -36,13 +38,15 @@ function handleKeyboardInput(event, props)
     }
 }
 
-function renderSubTags(props) {
+function renderSubTags(props, dimensionsRef, tagsAnimatedStyle) {
     return (
-        <ul>
+        <animated.div style={tagsAnimatedStyle}>
+        <ul ref={dimensionsRef}>
                             <li className="tag-level2"><span className="tag-icon"></span><span className="tag">organize</span></li>
                             <li className="tag-level2"><span className="tag-icon"></span><span className="tag">pro</span></li>
                             <li className="tag-level2"><span className="tag-icon"></span><span className="tag">tags multiword</span></li>
                     </ul>
+                    </animated.div>
     );
 }
 
@@ -73,7 +77,7 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-function renderSubFolders(props, focusedElementRef) {   
+function renderSubFolders(props, focusedElementRef, dimensionsRef, animatedStyle) {   
     
     const subfolders = props.foldersTree.find(x => x.name === "notes").subfolders
     .map(folder =>     
@@ -85,9 +89,11 @@ function renderSubFolders(props, focusedElementRef) {
         </li>
     );      
 
-    return (<ul>            
+    return (<animated.div style={animatedStyle}>            
+    <ul ref={dimensionsRef}>
         {subfolders}
-    </ul>     );
+    </ul>
+    </animated.div>     );
 }
 
 function focusFocusedElement(focusedElementRef) {        
@@ -99,8 +105,22 @@ function ConnectedNavigationPanel(props) {
     
     const focusedElementRef = useRef(null);
     useEffect(() => {
-        focusFocusedElement(focusedElementRef);
+        focusFocusedElement(focusedElementRef);        
     }, [props.selectedFolderId])
+
+    const [subFoldersDimensionsRef, subFoldersDimensions] = useDimensions();
+    const [subTagsDimensionsRef, subTagsHeightDimensions] = useDimensions();
+
+    const subfoldersAnimatedStyle = useSpring({opacity: props.foldersExpanded ? 1 : 0,         
+        overflow: 'hidden', 
+        height: props.foldersExpanded ? `${subFoldersDimensions.height}px` : '0px',
+        transform: `translateX(${props.foldersExpanded ? '0px' : '-20px'})`}        
+        );
+
+    const tagsAnimatedStyle = useSpring({opacity: props.tagsExpanded ? 1 : 0,         
+        overflow: 'hidden', 
+        height: props.tagsExpanded ? `${subTagsHeightDimensions.height}px` : '0px',
+        transform: `translateX(${props.tagsExpanded ? '0px' : '-20px'})`});
 
     const notesFolderId = props.foldersTree.find(x => x.name === "notes").id;        
     const trashFolderId = props.foldersTree.find(x => x.name === "trash").id;        
@@ -122,7 +142,7 @@ function ConnectedNavigationPanel(props) {
                     <span className="icon-folder-notes" ></span>
                     <span className="folders-header-caption">Notes</span>                
             </a>    
-            {props.foldersExpanded === true && renderSubFolders(props, focusedElementRef)}                                                             
+            {renderSubFolders(props, focusedElementRef, subFoldersDimensionsRef, subfoldersAnimatedStyle)}                                                             
         </div>
         <a href="#" 
         className={"trash" + (props.selectedFolderId === trashFolderId ? " nav-item-active" : "")} 
@@ -140,7 +160,7 @@ function ConnectedNavigationPanel(props) {
                         <span className="tag-icon"></span>      
                         <span className="tag">welcome</span>
                     </span>                        
-                    {props.tagsExpanded === true && renderSubTags(props)}                                            
+                    {renderSubTags(props, subTagsDimensionsRef, tagsAnimatedStyle)}                                            
                 </li>            
     </ul>
         <div className="logout-section">
